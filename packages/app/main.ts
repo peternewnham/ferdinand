@@ -1,6 +1,9 @@
 import { app, App } from 'electron';
 import { createWindow, mainWindow } from './main/index';
-import electronIsDev from 'electron-is-dev';
+
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
+app.commandLine.appendSwitch('disable-site-isolation-trials');
+app.commandLine.appendSwitch('disable-web-security');
 
 const getAppPath = (app: App) => {
   return `${app.getPath('appData')}/${app.name}`;

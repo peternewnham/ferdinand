@@ -51,7 +51,7 @@ export class ViewManager {
     });
 
     view.webContents.loadURL(this.service.getUrl(), {
-      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'
+      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36'
     });
     this.addEvents(view);
     return view;
@@ -80,15 +80,19 @@ export class ViewManager {
 
     view.webContents.on('will-navigate', (e) => {
       console.log('will-navigate');
-      e.preventDefault();
+      // e.preventDefault();
     });
 
     view.webContents.on('new-window', function(e, url) {
       console.log('new-window', url);
-      e.preventDefault();
-      const protocol = parse(url).protocol;
-      if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:') {
-        shell.openExternal(url);
+      if (!url.startsWith('https://accounts.google.com/AccountChooser')) {
+        e.preventDefault();
+        const protocol = parse(url).protocol;
+        if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:') {
+          shell.openExternal(url);
+        }
+      } else {
+        view.webContents.loadURL(url);
       }
     });
 
@@ -99,8 +103,18 @@ export class ViewManager {
   }
 
   public openDevTools() {
-    if (electronIsDev) {
-      this.view.webContents.openDevTools();
+    this.view.webContents.openDevTools();
+  }
+
+  public closeDevTools() {
+    this.view.webContents.closeDevTools();
+  }
+
+  public toggleDevTools() {
+    if (this.view.webContents.isDevToolsOpened()) {
+      this.closeDevTools();
+    } else {
+      this.openDevTools();
     }
   }
 

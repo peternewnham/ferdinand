@@ -1,16 +1,10 @@
-import { BrowserWindow, session, Tray, Menu } from 'electron';
+import { BrowserWindow } from 'electron';
 import { WindowManager } from './WindowManager';
-import {
-  MessageEventType,
-  ResizeEvent,
-  SetActiveServiceEvent,
-  SetServicesEvent,
-  SetUnreadCountEvent
-} from '../common/messaging';
+import { MessageEventType, ResizeEvent, SetActiveServiceEvent, SetUnreadCountEvent } from '../common/messaging';
 import { ViewController } from './services/ViewController';
 import { ServiceController } from './services/ServiceController';
-import { ServiceManager } from './services/ServiceManager';
 import { TrayService } from './services/TrayService';
+import { MenuService } from './services/MenuService';
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -19,6 +13,7 @@ export let mainWindow: BrowserWindow|null = null;
 let windowManager: WindowManager;
 let viewController: ViewController;
 let trayService: TrayService;
+let menuService: MenuService;
 
 export const createWindow = (appPath: string) => {
 
@@ -63,5 +58,8 @@ export const createWindow = (appPath: string) => {
 
   trayService = new TrayService();
   trayService.build();
+
+  menuService = new MenuService(viewController);
+  menuService.build();
 
 };

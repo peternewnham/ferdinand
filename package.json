@@ -1,7 +1,7 @@
 {
   "name": "Ferdinand",
   "productName": "Ferdinand",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Web service aggregator with built in notifications",
   "icon": "./resources/icons/color/64x64.png",
   "main": ".webpack/main",
@@ -9,7 +9,7 @@
     "start": "electron-forge start",
     "debug": "npm start -- --inspect-electron",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "build": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
@@ -48,7 +48,8 @@
                   "name": "main_window"
                 }
               ]
-            }
+            },
+            "port": "4000"
           }
         ]
       ]

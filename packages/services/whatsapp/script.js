@@ -1,4 +1,3 @@
-
 setTimeout(() => {
   const elem = document.querySelector('.landing-title.version-title');
   if (elem && elem.innerText.toLowerCase().includes('google chrome')) {
@@ -7,20 +6,27 @@ setTimeout(() => {
 }, 1000);
 
 window.addEventListener('beforeunload', async () => {
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    for(let registration of registrations) {
-      registration.unregister();
-    }
-  });
+  try {
+    const registrations = await window.navigator.serviceWorker.getRegistrations();
+    registrations.forEach((r) => {
+      r.unregister();
+      console.log('ServiceWorker unregistered');
+    });
+  } catch (err) {
+    console.err(err);
+  }
 });
 
 module.exports = ({ loop, setCount }) => {
   loop(() => {
-    const elements = document.querySelectorAll('.CxUIE, .unread, ._0LqQ');
+    const elements = document.querySelectorAll('[aria-label*=unread]');
+    console.log(elements);
     let count = 0;
-
     for (let i = 0; i < elements.length; i += 1) {
-      if (elements[i].querySelectorAll('.P6z4j').length === 1 && elements[i].querySelectorAll('*[data-icon="muted"]').length === 0) {
+      const el = elements[i];
+      const container = el.parentNode.parentNode;
+      console.log(container);
+      if (container.querySelector('[data-icon=muted]') === null) {
         count += 1;
       }
     }

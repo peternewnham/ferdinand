@@ -3,6 +3,7 @@ import { ViewManager, ViewSize } from './ViewManager';
 import { ServiceManager } from './ServiceManager';
 import { SetServicesEvent } from '../../common/messaging';
 import { WindowManager } from '../WindowManager';
+import electronIsDev from 'electron-is-dev';
 
 export class ViewController {
 
@@ -71,7 +72,9 @@ export class ViewController {
     });
     this.activeView = view;
     view.show(this.size);
-    view.openDevTools();
+    if (electronIsDev) {
+      view.openDevTools();
+    }
   }
 
   resize(size: ViewSize) {
@@ -79,6 +82,10 @@ export class ViewController {
       this.size = size;
       this.activeView.resize(size);
     }
+  }
+
+  getActiveView(): ViewManager | null {
+    return this.activeView;
   }
 
 }
