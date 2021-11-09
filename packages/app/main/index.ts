@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, session } from 'electron';
 import { WindowManager } from './WindowManager';
 import { MessageEventType, ResizeEvent, SetActiveServiceEvent, SetUnreadCountEvent } from '../common/messaging';
 import { ViewController } from './services/ViewController';

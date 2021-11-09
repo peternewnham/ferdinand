@@ -27,7 +27,30 @@ export class ViewController {
   initialise(services: ServiceManager[]) {
     this.services = services;
     this.views = services.map(service => {
-      return new ViewManager(this.window, service, () => this.checkAllReady());
+      const view = new ViewManager(this.window, service, () => this.checkAllReady());
+      if (service.getType() === 'hangoutschat') {
+        view.getView().webContents.session.webRequest.onHeadersReceived((details, callback) => {
+          const responseHeaders = details && details.responseHeaders || {};
+          delete responseHeaders['x-frame-options'];
+          let csp = responseHeaders && responseHeaders['content-security-policy'] || [] as string[];
+          if (details.url.indexOf('https://chat.google.com/u/0/frame') === 0 && Array.isArray(csp)) {
+            const newCsp = csp.map(policy => {
+              return policy.replace(';frame-src ', ';frame-src https://admin.google.com/');
+            })
+            callback({
+              responseHeaders: {
+                ...responseHeaders,
+                'content-security-policy': newCsp,
+              }
+            });
+          } else {
+            callback({
+              responseHeaders: { ...responseHeaders }
+            });
+          }
+        });
+      }
+      return view;
     });
     if (this.views.length > 0) {
       this.activateIndex(0);

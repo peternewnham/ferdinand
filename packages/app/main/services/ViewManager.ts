@@ -1,9 +1,8 @@
-import { BrowserView, BrowserWindow, WebPreferences, shell } from 'electron';
+import { BrowserView, BrowserWindow, shell, WebPreferences, session } from 'electron';
 import { ServiceManager } from './ServiceManager';
 import * as path from 'path';
 import { parse } from 'url';
 import { MessageEventType } from '../../common/messaging';
-import electronIsDev from 'electron-is-dev';
 
 export interface ViewSize {
   x: number;
@@ -51,7 +50,7 @@ export class ViewManager {
     });
 
     view.webContents.loadURL(this.service.getUrl(), {
-      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36'
+      userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36'
     });
     this.addEvents(view);
     return view;
